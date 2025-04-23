@@ -69,6 +69,7 @@ public class Index5 {
             Map.Entry pair = (Map.Entry) it.next();
             DictEntry dd = (DictEntry) pair.getValue();
             System.out.print("** [" + pair.getKey() + "," + dd.doc_freq + "]       =--> ");
+            
             printPostingList(dd.pList);
         }
         System.out.println("------------------------------------------------------");

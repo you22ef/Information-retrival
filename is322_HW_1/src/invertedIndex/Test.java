@@ -18,8 +18,10 @@ public class Test {
 
     public static void main(String args[]) throws IOException {
         Index5 index = new Index5();
+        WikiCrawler crawler = new WikiCrawler();
         //|**  change it to your collection directory 
-        //|**  in windows "C:\\tmp11\\rl\\collection\\"       
+        //|**  in windows "C:\\tmp11\\rl\\collection\\"
+        crawler.crawling();       
         String files = "is322_HW_1/src/invertedIndex/Path/";
 
         File file = new File(files);
@@ -43,8 +45,8 @@ public class Test {
         index.store("data.txt");
         index.printDictionary();
 
-        String test3 = "Youssef"; // data  should plain greatest comif
-        System.out.println("Boo0lean Model result = \n" + index.find_24_01(test3));
+        // String test3 = "Youssef"; // data  should plain greatest comif
+        // System.out.println("Boo0lean Model result = \n" + index.find_24_01(test3));
 
         String phrase = "";
 

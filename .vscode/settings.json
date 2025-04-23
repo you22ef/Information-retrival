@@ -1,6 +1,5 @@
 {
     "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "HW_2/lib/**/*.jar"
+        "is322_HW_1/lib/**/*.jar"
     ]
 }

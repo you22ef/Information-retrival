@@ -1,3 +1,4 @@
+package invertedIndex;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -17,7 +18,7 @@ public class WikiCrawler {
     private static final String WIKIPEDIA_BASE = "https://en.wikipedia.org";
     private static final Pattern WIKI_LINK_PATTERN = Pattern.compile("^/wiki/[^:#]*$");
 
-    public static void main(String[] args) {
+    public void crawling() {
         // Seed URLs
         String[] seeds = {
             "https://en.wikipedia.org/wiki/List_of_pharaohs",
@@ -45,10 +46,10 @@ public class WikiCrawler {
                 System.out.println("Crawled: " + currentUrl);
                 visited.add(currentUrl);
                 String plainText = doc.text();
-                // create new folder called "wiki" if it doesn't exist
-                java.nio.file.Files.createDirectories(java.nio.file.Paths.get("wiki"));
+                // // create new folder called "wiki" if it doesn't exist
+                // java.nio.file.Files.createDirectories(java.nio.file.Paths.get("Path"));
                 // save the plain text to a file named after the last part of the URL
-                java.nio.file.Files.write(java.nio.file.Paths.get("wiki/" + currentUrl.substring(currentUrl.lastIndexOf('/') + 1) + ".txt"), plainText.getBytes());
+                java.nio.file.Files.write(java.nio.file.Paths.get("is322_HW_1\\src\\invertedIndex\\Path/" + currentUrl.substring(currentUrl.lastIndexOf('/') + 1) + ".txt"), plainText.getBytes());
                 // extract links from the page
                 Elements links = doc.select("a[href]");
                 for (Element link : links) {
