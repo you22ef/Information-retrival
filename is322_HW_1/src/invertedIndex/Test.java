@@ -20,7 +20,7 @@ public class Test {
         Index5 index = new Index5();
         //|**  change it to your collection directory 
         //|**  in windows "C:\\tmp11\\rl\\collection\\"       
-        String files = "D:\\Information retrival\\is322_HW_1\\is322_HW_1\\src\\invertedIndex\\Path\\";
+        String files = "is322_HW_1/src/invertedIndex/Path/";
 
         File file = new File(files);
         

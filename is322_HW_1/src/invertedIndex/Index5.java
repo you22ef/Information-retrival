@@ -257,7 +257,7 @@ public class Index5 {
 
     public void store(String storageName) { // Stores the inverted index to a file for future use
         try {
-            String pathToStorage = "D:\\Information retrival\\is322_HW_1\\is322_HW_1\\src\\invertedIndex\\Path\\data\\"+storageName;
+            String pathToStorage = "is322_HW_1/src/invertedIndex/Path/data/"+storageName;
             Writer wr = new FileWriter(pathToStorage);
             for (Map.Entry<Integer, SourceRecord> entry : sources.entrySet()) {
                 System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue().URL + ", Value = " + entry.getValue().title + ", Value = " + entry.getValue().text);
@@ -294,7 +294,7 @@ public class Index5 {
     }
 //=========================================    
     public boolean storageFileExists(String storageName){//// Checks if a storage file already exists
-        java.io.File f = new java.io.File("D:\\Information retrival\\is322_HW_1\\is322_HW_1\\src\\invertedIndex\\Path\\data\\"+storageName);
+        java.io.File f = new java.io.File("is322_HW_1/src/invertedIndex/Path/data/"+storageName);
         if (f.exists() && !f.isDirectory())
             return true;
         return false;
@@ -303,7 +303,7 @@ public class Index5 {
 //----------------------------------------------------    
     public void createStore(String storageName) {// Creates an empty storage file
         try {
-            String pathToStorage = "D:\\Information retrival\\is322_HW_1\\is322_HW_1\\src\\invertedIndex\\Path\\data\\"+storageName;
+            String pathToStorage = "is322_HW_1/src/invertedIndex/Path/data/"+storageName;
             Writer wr = new FileWriter(pathToStorage);
             wr.write("end" + "\n");
             wr.close();
@@ -316,7 +316,7 @@ public class Index5 {
      //load index from hard disk into memory
     public HashMap<String, DictEntry> load(String storageName) {// Loads an existing index from a file into memory
         try {
-            String pathToStorage = "D:\\Information retrival\\is322_HW_1\\is322_HW_1\\src\\invertedIndex\\Path\\data\\"+storageName;         
+            String pathToStorage = "is322_HW_1/src/invertedIndex/Path/data/"+storageName;         
             sources = new HashMap<Integer, SourceRecord>();
             index = new HashMap<String, DictEntry>();
             BufferedReader file = new BufferedReader(new FileReader(pathToStorage));

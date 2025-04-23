@@ -1,6 +1,7 @@
-1,D:\Information retrival\is322_HW_1\is322_HW_1\src\invertedIndex\Path\index.txt,D:\Information retrival\is322_HW_1\is322_HW_1\src\invertedIndex\Path\index.txt,4,0.0000,notext
-2,D:\Information retrival\is322_HW_1\is322_HW_1\src\invertedIndex\Path\index2.txt,D:\Information retrival\is322_HW_1\is322_HW_1\src\invertedIndex\Path\index2.txt,3,0.0000,notext
+1,is322_HW_1/src/invertedIndex/Path/index.txt,is322_HW_1/src/invertedIndex/Path/index.txt,5,0.0000,notext
+2,is322_HW_1/src/invertedIndex/Path/index2.txt,is322_HW_1/src/invertedIndex/Path/index2.txt,4,0.0000,notext
 section2
+abdo,2,2;1,1:2,1:
 youssef,1,1;1,1:
 ahmed,1,1;2,1:
 hassan,1,1;2,1:
