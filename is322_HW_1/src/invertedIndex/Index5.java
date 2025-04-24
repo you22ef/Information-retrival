@@ -43,23 +43,16 @@ public class Index5 {
 
 
     //---------------------------------------------
-    public void printPostingList(Posting p) { // Prints the posting list of a given term
-        // Iterator<Integer> it2 = hset.iterator();
-        System.out.print("[");
+   public void printPostingList(Posting p) { // Prints the posting list of a given term
         while (p != null) {
-            /// -4- **** complete here ****
-            // fix get rid of the last comma
-            // Avoids trailing comma
-            if(p.next == null)
-                System.out.print("" + p.docId );
-            else
-            {
-                System.out.print("" + p.docId + "," );
+            if (p.next == null) {
+                System.out.print("{" + p.docId + "," + p.dtf + "}");
+            } else {
+                System.out.print("{" + p.docId + "," + p.dtf + "}" + ", ");
             }
-            
             p = p.next;
         }
-        System.out.println("]");
+
     }
 
     //---------------------------------------------
