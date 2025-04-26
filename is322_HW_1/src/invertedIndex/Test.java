@@ -9,6 +9,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
 
 /**
  *
@@ -38,25 +44,44 @@ public class Test {
         fileList = index.sort(fileList);
         index.N = fileList.length;
 
+
         for (int i = 0; i < fileList.length; i++) {
             fileList[i] = files + fileList[i];
         }
         index.buildIndex(fileList);
         index.store("data.txt");
         index.printDictionary();
+        TFIDF tfidf = new TFIDF();
+        tfidf.BuildTFIDF(Arrays.asList(fileList));
+
+        String query = "";
 
         // String test3 = "Youssef"; // data  should plain greatest comif
         // System.out.println("Boo0lean Model result = \n" + index.find_24_01(test3));
 
-        String phrase = "";
+
 
         do {
-            System.out.println("Print search phrase: ");
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            phrase = in.readLine();
-/// -3- **** complete here ****
-            System.out.println("Phrase search result = \n" + index.find_24_01(phrase));
-        } while (!phrase.isEmpty());
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Enter your query: ");
+            query = scanner.nextLine();
+            QueryPreprocessor queryPreprocessor = new QueryPreprocessor();
+            // Step 1: Preprocess the query
+            List<String> queryTokens = queryPreprocessor.processQuery(query);
+            // Step 2: Compute TF-IDF for the query
+            Map<String, Double> queryTFIDF = tfidf.computeQueryTFIDF(queryTokens);
+            // Step 3: Calculate cosine similarity
+            Map<String, Double> results = tfidf.calculateCosineSimilarityForAllDocuments(queryTFIDF);
+            //sort the results by the cosine similarity score
+
+            //   tfidf.printResults(results);
+            tfidf.printResults(results);
+            // Step 4: Sort the results by the cosine similarity score
+            
+            
+
+            System.out.println("Phrase search result = \n" + index.find_24_01(query));
+        } while (!query.isEmpty());
 
     }
 }
