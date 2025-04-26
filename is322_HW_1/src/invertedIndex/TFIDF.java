@@ -67,7 +67,7 @@ public class TFIDF {
     // method to calculate term frequency for each document
     // and store it in a list of maps where each map represents a document
     // and the keys are the terms and the values are their frequencies
-    public void calculateTF() {
+    public void calculateTF() {        
         for (List<String> document : documents) {
             Map<String, Double> tf = new HashMap<>();
             for (String term : document) {
@@ -79,7 +79,7 @@ public class TFIDF {
             }
             for (String term : tf.keySet()) {
                 double count = tf.get(term);
-                double tfValue = (double) count / document.size();
+                double tfValue = 1 + Math.log10(count);
                 tf.put(term, tfValue);
             }
             termFrequencies.add(tf);
@@ -96,7 +96,7 @@ public class TFIDF {
                 }
             }
             int documentCount = documents.size();
-            double idf = Math.log((documentCount + 0.0) / (docCnt + 0.0));
+            double idf = Math.log10((double)documentCount  / docCnt );
             // todo: should i optimize that if documentCount == docCnt make it +1
             inverseDocumentFrequencies.put(term, idf);
 
