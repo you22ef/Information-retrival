@@ -98,7 +98,6 @@ public class TFIDF {
             }
             int documentCount = documents.size();
             double idf = Math.log10((double)documentCount  / docCnt );
-            // todo: should i optimize that if documentCount == docCnt make it +1
             inverseDocumentFrequencies.put(term, idf);
 
         }
@@ -143,10 +142,15 @@ public class TFIDF {
             queryTF.put(token, queryTF.getOrDefault(token, 0.0) + 1);
         }
         Map<String, Double> queryTFIDF = new HashMap<>();
-        for (String token : queryTF.keySet()) {
-            double tf = Math.log10(queryTF.get(token))+1;
-            double idf = inverseDocumentFrequencies.getOrDefault(token, 0.0);
-            queryTFIDF.put(token, tf * idf); // TF-IDF
+        for(String term : vocabulary){
+            double tf = queryTF.getOrDefault(term, 0.0);
+            double idf = inverseDocumentFrequencies.getOrDefault(term, 0.0);
+            if (tf > 0) {
+                tf = 1 + Math.log10(tf); // TF
+                queryTFIDF.put(term, tf * idf); // TF-IDF
+            } else {
+                queryTFIDF.put(term, 0.0); // TF-IDF
+            }
         }
         return queryTFIDF;
     }
