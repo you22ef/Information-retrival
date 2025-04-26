@@ -52,6 +52,7 @@ public class Index5 {
             }
             p = p.next;
         }
+        System.out.println();
 
     }
 
@@ -67,6 +68,7 @@ public class Index5 {
         }
         System.out.println("------------------------------------------------------");
         System.out.println("*** Number of terms = " + index.size());
+
     }
  
     //-----------------------------------------------
