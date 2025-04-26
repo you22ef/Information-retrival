@@ -67,7 +67,8 @@ public class TFIDF {
     // method to calculate term frequency for each document
     // and store it in a list of maps where each map represents a document
     // and the keys are the terms and the values are their frequencies
-    public void calculateTF() {        
+    public void calculateTF() {
+        
         for (List<String> document : documents) {
             Map<String, Double> tf = new HashMap<>();
             for (String term : document) {
@@ -141,12 +142,13 @@ public class TFIDF {
         for (String token : queryTokens) {
             queryTF.put(token, queryTF.getOrDefault(token, 0.0) + 1);
         }
+        Map<String, Double> queryTFIDF = new HashMap<>();
         for (String token : queryTF.keySet()) {
-            double tf = queryTF.get(token) / queryTokens.size();
+            double tf = Math.log10(queryTF.get(token))+1;
             double idf = inverseDocumentFrequencies.getOrDefault(token, 0.0);
-            queryTF.put(token, tf * idf); // TF-IDF
+            queryTFIDF.put(token, tf * idf); // TF-IDF
         }
-        return queryTF;
+        return queryTFIDF;
     }
     // method to calculate cosine similarity between the query and a document
     // and return the cosine similarity score
