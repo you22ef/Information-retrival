@@ -188,7 +188,7 @@ public class TFIDF {
     public void printResults(Map<String, Double> results) {
         
         for (Map.Entry<String, Double> entry : results.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+            System.out.printf("%s: %.6f\n", entry.getKey(), entry.getValue());
         }
     }
 }

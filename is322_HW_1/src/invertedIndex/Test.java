@@ -11,9 +11,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 
 /**
@@ -56,15 +58,13 @@ public class Test {
 
         String query = "";
 
-        // String test3 = "Youssef"; // data  should plain greatest comif
-        // System.out.println("Boo0lean Model result = \n" + index.find_24_01(test3));
-
-
-
         do {
             Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter your query: ");
+            System.out.print("Enter your query or 'exit' to quit: ");
             query = scanner.nextLine();
+            if (query.equalsIgnoreCase("exit")) {
+                break;
+            }
             QueryPreprocessor queryPreprocessor = new QueryPreprocessor();
             // Step 1: Preprocess the query
             List<String> queryTokens = queryPreprocessor.processQuery(query);
@@ -79,8 +79,7 @@ public class Test {
             // Step 4: Sort the results by the cosine similarity score
             
             
-
-            System.out.println("Phrase search result = \n" + index.find_24_01(query));
+            // System.out.println("Phrase search result = \n" + index.find_24_01(query));
         } while (!query.isEmpty());
 
     }
