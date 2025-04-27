@@ -44,8 +44,24 @@ public class WikiCrawler {
             try {
                 Document doc = Jsoup.connect(currentUrl).get(); // Fetch the page
                 System.out.println("Crawled: " + currentUrl);
-                visited.add(currentUrl); 
-                String plainText = doc.text(); // Get the plain text of the page
+                visited.add(currentUrl);
+
+                // Select the main content area
+                Element contentDiv = doc.selectFirst("#mw-content-text .mw-parser-output");
+                StringBuilder plainTextBuilder = new StringBuilder();
+
+                if (contentDiv != null) {
+                    // Select only paragraph elements within the main content
+                    Elements paragraphs = contentDiv.select("p");
+                    for (Element p : paragraphs) {
+                        plainTextBuilder.append(p.text()).append("\n"); // Append text of each paragraph
+                    }
+                } else {
+                        // Fallback to doc.text() if the specific content div is not found
+                        plainTextBuilder.append(doc.text());
+                }
+                String plainText = plainTextBuilder.toString();
+
                 // save the plain text to a file named after the last part of the URL
                 java.nio.file.Files.write(
                         java.nio.file.Paths.get("is322_HW_1/src/invertedIndex/Path/"
