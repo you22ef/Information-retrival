@@ -79,7 +79,7 @@ public class Test {
             // Step 4: Sort the results by the cosine similarity score
             
             
-            // System.out.println("Phrase search result = \n" + index.find_24_01(query));
+            System.out.println("Phrase search result = \n" + index.find_24_01(query));
         } while (!query.isEmpty());
 
     }

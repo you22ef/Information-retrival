@@ -162,71 +162,102 @@ public class Index5 {
 //        return s.toString();
     }
 
-    //----------------------------------------------------------------------------  
-    Posting intersect(Posting pL1, Posting pL2) {// Computes the intersection of two posting lists (for phrase or multi-word search)
-///****  -1-   complete after each comment ****
-//   INTERSECT ( p1 , p2 )
-//          1  answer ←      {}
-        Posting answer = null;
-        Posting last = null;
-//      2 while p1  != NIL and p2  != NIL
-     
-//          3 do if docID ( p 1 ) = docID ( p2 )
- 
-//          4   then ADD ( answer, docID ( p1 ))
-                // answer.add(pL1.docId);
- 
-//          5       p1 ← next ( p1 )
-//          6       p2 ← next ( p2 )
- 
- //          7   else if docID ( p1 ) < docID ( p2 )
-            
-//          8        then p1 ← next ( p1 )
-//          9        else p2 ← next ( p2 )
- 
-//      10 return answer
-        while (pL1 != null && pL2 != null) {
-            if (pL1.docId == pL2.docId) {
-                if (answer == null) {
-                    answer = new Posting(pL1.docId, pL1.dtf);
-                    last = answer;
+    // filepath: d:\abdo learning\4th year\sec sim\IR\IR Assignments\Information-retrival\is322_HW_1\src\invertedIndex\Index5.java
+        //----------------------------------------------------------------------------  
+        Posting intersect(Posting pL1, Posting pL2) {// Computes the intersection of two posting lists (for phrase or multi-word search)
+    ///****  -1-   complete after each comment ****
+    //   INTERSECT ( p1 , p2 )
+    //          1  answer ←      {}
+            Posting answer = null;
+            Posting last = null;
+    //      2 while p1  != NIL and p2  != NIL
+            while (pL1 != null && pL2 != null) {
+    //          3 do if docID ( p 1 ) = docID ( p2 )
+                if (pL1.docId == pL2.docId) {
+    //          4   then ADD ( answer, docID ( p1 ))
+                    // answer.add(pL1.docId);
+                    if (answer == null) {
+                        answer = new Posting(pL1.docId);
+                        last = answer;
+                    } else {
+                        last.next = new Posting(pL1.docId);
+                        last = last.next;
+                    }
+    //          5       p1 ← next ( p1 )
+                    pL1 = pL1.next;
+    //          6       p2 ← next ( p2 )
+                    pL2 = pL2.next;
+    //          7   else if docID ( p1 ) < docID ( p2 )
+                } else if (pL1.docId < pL2.docId) {
+    //          8        then p1 ← next ( p1 )
+                    pL1 = pL1.next;
+    //          9        else p2 ← next ( p2 )
                 } else {
-                    last.next = new Posting(pL1.docId, pL1.dtf);
-                    last = last.next;
+                    pL2 = pL2.next;
                 }
-                pL1 = pL1.next;
-                pL2 = pL2.next;
-            } else if (pL1.docId < pL2.docId) {
-                pL1 = pL1.next;
-            } else {
-                pL2 = pL2.next;
             }
+    //      10 return answer
+            return answer;
         }
-        return answer;
-    }
 
-    public String find_24_01(String phrase) { // any mumber of terms non-optimized search //// Finds documents containing all words in a phrase (basic search function)
-        String result = "";
-        String[] words = phrase.split("\\W+");
-        int len = words.length;
-        
-        //fix this if word is not in the hash table will crash...
-        if (!index.containsKey(words[0].toLowerCase())) {
-            return "Word not found in index.";
+        // ...existing code...
+
+        public String find_24_01(String phrase) { // any mumber of terms non-optimized search 
+            String result = "";
+            String[] words = phrase.split("\\W+");
+            int len = words.length;
+            
+            if (len == 0) {
+                return "Query is empty.";
+            }
+            
+            Posting posting = null;
+            int check = 0;
+            for (int i = 0; i < len; i++) {
+                if (i == check) {
+                    // Handle the first word separately
+                    String firstWord = words[i].toLowerCase();
+                    if (stopWord(firstWord)) {
+                        check++;
+                        continue;
+                    }
+                    if (!index.containsKey(firstWord)) {
+                        return "Term '" + firstWord + "' not found in index.";
+                    }
+                    posting = index.get(firstWord).pList;
+                    continue; // Skip to the next iteration
+                }
+                String currentWord = words[i].toLowerCase();
+                if (stopWord(currentWord)) {
+                    continue;
+                }
+                if (!index.containsKey(currentWord)) {
+                    return "Term '" + currentWord + "' not found in index.";
+                }
+                Posting currentPosting = index.get(currentWord).pList;
+                if (i == 0) {
+                    posting = currentPosting;
+                } else {
+                    posting = intersect(posting, currentPosting);
+                }
+            }
+            // Format the result
+            if (posting == null) {
+                return "No documents found matching the phrase.";
+            }
+
+            while (posting != null) {
+                //System.out.println("\t" + sources.get(num));
+                SourceRecord docInfo = sources.get(posting.docId);
+                if (docInfo != null) { // Check if docInfo exists
+                    result += "\t" + posting.docId + " - " + docInfo.title + " - " + docInfo.length + "\n";
+                } else {
+                    result += "\t" + posting.docId + " - [Document Info Not Found] \n"; // Handle missing doc info
+                }
+                posting = posting.next;
+            }
+            return result.isEmpty() ? "No documents found matching the phrase." : result; // Return message if result is still empty
         }
-        Posting posting = index.get(words[0].toLowerCase()).pList;
-        int i = 1;
-        while (i < len) {
-            posting = intersect(posting, index.get(words[i].toLowerCase()).pList);
-            i++;
-        }
-        while (posting != null) {
-            //System.out.println("\t" + sources.get(num));
-            result += "\t" + posting.docId + " - " + sources.get(posting.docId).title + " - " + sources.get(posting.docId).length + "\n";
-            posting = posting.next;
-        }
-        return result;
-    }
     
     
     //---------------------------------
