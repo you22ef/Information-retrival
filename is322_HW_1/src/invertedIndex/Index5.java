@@ -162,8 +162,6 @@ public class Index5 {
 //        return s.toString();
     }
 
-    // filepath: d:\abdo learning\4th year\sec sim\IR\IR Assignments\Information-retrival\is322_HW_1\src\invertedIndex\Index5.java
-        //----------------------------------------------------------------------------  
         Posting intersect(Posting pL1, Posting pL2) {// Computes the intersection of two posting lists (for phrase or multi-word search)
     ///****  -1-   complete after each comment ****
     //   INTERSECT ( p1 , p2 )
@@ -199,8 +197,6 @@ public class Index5 {
     //      10 return answer
             return answer;
         }
-
-        // ...existing code...
 
         public String find_24_01(String phrase) { // any mumber of terms non-optimized search 
             String result = "";
