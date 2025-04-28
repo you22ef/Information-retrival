@@ -1,10 +1,5 @@
 {
     "java.project.referencedLibraries": [
         "is322_HW_1/lib/**/*.jar"
-    ],
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#341877",
-        "titleBar.activeBackground": "#4821A6",
-        "titleBar.activeForeground": "#FCFCFE"
-    }
+    ]
 }

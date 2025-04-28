@@ -7,7 +7,6 @@ package invertedIndex;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -73,29 +72,19 @@ public class Test {
             Map<String, Double> queryTFIDF = tfidf.computeQueryTFIDF(queryTokens);
             // Step 3: Calculate cosine similarity
             Map<String, Double> results = tfidf.calculateCosineSimilarityForAllDocuments(queryTFIDF);
-            //sort the results by the cosine similarity score
+            // Step 4: Sort the results by the cosine similarity score
+            results = results.entrySet()
+                    .stream()
+                    .sorted((e1, e2) -> Double.compare(e2.getValue(), e1.getValue()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                            (e1, e2) -> e1, LinkedHashMap::new));
 
-            //   tfidf.printResults(results);
-            List<Map.Entry<String, Double>> sortedResults = new ArrayList<>(results.entrySet());
-            sortedResults.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
-
-            // Step 5: View and save Top 10
-            List<Map.Entry<String, Double>> top10 = sortedResults.stream().limit(10).collect(Collectors.toList());
-
-            // Print Top 10 in the console
-            System.out.println("\nTop 10 Documents:");
-            top10.forEach(entry -> System.out.printf("%s : %.6f%n", entry.getKey(), entry.getValue()));
-
-            // Save to file
-            try (FileWriter writer = new FileWriter("Top10Results.txt")) {
-                for (Map.Entry<String, Double> entry : top10) {
-                    writer.write(String.format("%s : %.6f%n", entry.getKey(), entry.getValue()));
-                }
-                System.out.println("\nResults saved to 'Top10Results.txt'");
-            } catch (IOException e) {
-                System.err.println("Error writing to file: " + e.getMessage());
-            }
-        }   while (!query.isEmpty());
+            // Step 5: Print the results
+            tfidf.printResults(results);
+            
+            
+            System.out.println("Phrase search result = \n" + index.find_24_01(query));
+        } while (!query.isEmpty());
 
     }
 }
