@@ -26,7 +26,16 @@ public class TFIDF {
         this.rawDocuments = new ArrayList<>();
         this.documentsNames = new ArrayList<>();
     }
- 
+
+    // method to build the TF-IDF model from a list of files
+    public void BuildTFIDF(List<String> files) throws IOException {
+        this.rawDocuments = loadFiles(files);
+        this.documents = preprocessDocuments(rawDocuments);
+        calculateTF();
+        calculateIDF();
+        calculateTFIDF();
+    }
+
     // method to load files from a list of file paths
     // and return the raw text of the documents
     public List<String> loadFiles(List<String> files) throws IOException {
@@ -49,7 +58,9 @@ public class TFIDF {
         }
         return rawDocuments;
     }
-    // method to preprocess a list of raw documents and return a list of tokenized documents
+
+    // method to preprocess a list of raw documents and return a list of tokenized
+    // documents
     // and update the vocabulary with the unique tokens
     public List<List<String>> preprocessDocuments(List<String> rawDocuments) {
         TextPreprocessor tp = new TextPreprocessor();
@@ -64,11 +75,12 @@ public class TFIDF {
         }
         return documents;
     }
+
     // method to calculate term frequency for each document
     // and store it in a list of maps where each map represents a document
     // and the keys are the terms and the values are their frequencies
     public void calculateTF() {
-        
+
         for (List<String> document : documents) {
             Map<String, Double> tf = new HashMap<>();
             for (String term : document) {
@@ -86,8 +98,11 @@ public class TFIDF {
             termFrequencies.add(tf);
         }
     }
-   // method to calculate inverse document frequency for each term in the vocabulary
-    // and store it in a map where the keys are the terms and the values are their IDF scores
+
+    // method to calculate inverse document frequency for each term in the
+    // vocabulary
+    // and store it in a map where the keys are the terms and the values are their
+    // IDF scores
     public void calculateIDF() {
         for (String term : vocabulary) {
             int docCnt = 0;
@@ -97,11 +112,12 @@ public class TFIDF {
                 }
             }
             int documentCount = documents.size();
-            double idf = Math.log10((double)documentCount  / docCnt );
+            double idf = Math.log10((double) documentCount / docCnt);
             inverseDocumentFrequencies.put(term, idf);
 
         }
     }
+
     // method to calculate TF-IDF scores for each document
     // and store it in a list of maps where each map represents a document
     // and the keys are the terms and the values are their TF-IDF scores
@@ -117,32 +133,17 @@ public class TFIDF {
             tfidfScores.add(tfidf);
         }
     }
-  // method to print the TF-IDF scores for each document
-    public void printTFIDF() {
-        for (Map<String, Double> tfidf : tfidfScores) {
-            System.out.println("document");
-            for (String term : vocabulary) {
-                System.out.println("Term: " + term + ", TF-IDF: " + tfidf.get(term));
-            }
-        }
-    }
-   // method to build the TF-IDF model from a list of files
-    public void BuildTFIDF(List<String> files) throws IOException {
-        this.rawDocuments = loadFiles(files);
-        this.documents = preprocessDocuments(rawDocuments);
-        calculateTF();
-        calculateIDF();
-        calculateTFIDF();
-    }
-    // method to compute TF-IDF scores for the query tokens 
-    // and return a map where the keys are the terms and the values are their TF-IDF scores
+
+    // method to compute TF-IDF scores for the query tokens
+    // and return a map where the keys are the terms and the values are their TF-IDF
+    // scores
     public Map<String, Double> computeQueryTFIDF(List<String> queryTokens) {
         Map<String, Double> queryTF = new HashMap<>();
         for (String token : queryTokens) {
             queryTF.put(token, queryTF.getOrDefault(token, 0.0) + 1);
         }
         Map<String, Double> queryTFIDF = new HashMap<>();
-        for(String term : vocabulary){
+        for (String term : vocabulary) {
             double tf = queryTF.getOrDefault(term, 0.0);
             double idf = inverseDocumentFrequencies.getOrDefault(term, 0.0);
             if (tf > 0) {
@@ -154,6 +155,7 @@ public class TFIDF {
         }
         return queryTFIDF;
     }
+
     // method to calculate cosine similarity between the query and a document
     // and return the cosine similarity score
     double calculateCosineSimilarity(Map<String, Double> query, Map<String, Double> document) {
@@ -173,8 +175,10 @@ public class TFIDF {
             return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
         }
     }
+
     // method to calculate cosine similarity for all documents in the collection
-    // and return a map where the keys are the document names and the values are their cosine similarity scores
+    // and return a map where the keys are the document names and the values are
+    // their cosine similarity scores
     public Map<String, Double> calculateCosineSimilarityForAllDocuments(Map<String, Double> query) {
         Map<String, Double> cosineSimilarities = new HashMap<>();
         for (int i = 0; i < tfidfScores.size(); i++) {
@@ -183,12 +187,5 @@ public class TFIDF {
             cosineSimilarities.put("Document " + documentsNames.get(i), cosineSimilarity);
         }
         return cosineSimilarities;
-    }
-    // method to print the results of the cosine similarity calculations
-    public void printResults(Map<String, Double> results) {
-        
-        for (Map.Entry<String, Double> entry : results.entrySet()) {
-            System.out.printf("%s: %.6f\n", entry.getKey(), entry.getValue());
-        }
     }
 }
