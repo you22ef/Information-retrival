@@ -7,6 +7,7 @@ package invertedIndex;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -75,12 +76,26 @@ public class Test {
             //sort the results by the cosine similarity score
 
             //   tfidf.printResults(results);
-            tfidf.printResults(results);
-            // Step 4: Sort the results by the cosine similarity score
-            
-            
-            System.out.println("Phrase search result = \n" + index.find_24_01(query));
-        } while (!query.isEmpty());
+            List<Map.Entry<String, Double>> sortedResults = new ArrayList<>(results.entrySet());
+            sortedResults.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+
+            // Step 5: View and save Top 10
+            List<Map.Entry<String, Double>> top10 = sortedResults.stream().limit(10).collect(Collectors.toList());
+
+            // Print Top 10 in the console
+            System.out.println("\nTop 10 Documents:");
+            top10.forEach(entry -> System.out.printf("%s : %.6f%n", entry.getKey(), entry.getValue()));
+
+            // Save to file
+            try (FileWriter writer = new FileWriter("Top10Results.txt")) {
+                for (Map.Entry<String, Double> entry : top10) {
+                    writer.write(String.format("%s : %.6f%n", entry.getKey(), entry.getValue()));
+                }
+                System.out.println("\nResults saved to 'Top10Results.txt'");
+            } catch (IOException e) {
+                System.err.println("Error writing to file: " + e.getMessage());
+            }
+        }   while (!query.isEmpty());
 
     }
 }
