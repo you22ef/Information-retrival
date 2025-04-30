@@ -155,11 +155,11 @@ public class Index5 {
 //----------------------------------------------------------------------------  
 
     String stemWord(String word) { //skip for now -- // Stemming function (currently does nothing but can be extended to use a stemmer)
-        return word;
-//        Stemmer s = new Stemmer();
-//        s.addString(word);
-//        s.stem();
-//        return s.toString();
+        // return word;
+        Stemmer s = new Stemmer();
+        s.addString(word);
+        s.stem();
+        return s.toString();
     }
 
         Posting intersect(Posting pL1, Posting pL2) {// Computes the intersection of two posting lists (for phrase or multi-word search)
