@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.io.PrintWriter;
 
 /**
@@ -198,62 +199,59 @@ public class Index5 {
             return answer;
         }
 
-        public String find_24_01(String phrase) { // any mumber of terms non-optimized search 
-            String result = "";
-            String[] words = phrase.split("\\W+");
-            int len = words.length;
-            
-            if (len == 0) {
-                return "Query is empty.";
+    public String find_24_01_OR(String phrase) {
+        String result = "";
+        String[] words = phrase.split("\\W+");
+        Set<Integer> docIdSet = new HashSet<>();
+    
+        for (String word : words) {
+            word = word.toLowerCase();
+            if (!index.containsKey(word)) {
+                continue; // Skip words not in the index
             }
-            
-            Posting posting = null;
-            int check = 0;
-            for (int i = 0; i < len; i++) {
-                if (i == check) {
-                    // Handle the first word separately
-                    String firstWord = words[i].toLowerCase();
-                    if (stopWord(firstWord)) {
-                        check++;
-                        continue;
-                    }
-                    if (!index.containsKey(firstWord)) {
-                        return "Term '" + firstWord + "' not found in index.";
-                    }
-                    posting = index.get(firstWord).pList;
-                    continue; // Skip to the next iteration
-                }
-                String currentWord = words[i].toLowerCase();
-                if (stopWord(currentWord)) {
-                    continue;
-                }
-                if (!index.containsKey(currentWord)) {
-                    return "Term '" + currentWord + "' not found in index.";
-                }
-                Posting currentPosting = index.get(currentWord).pList;
-                if (i == 0) {
-                    posting = currentPosting;
-                } else {
-                    posting = intersect(posting, currentPosting);
-                }
-            }
-            // Format the result
-            if (posting == null) {
-                return "No documents found matching the phrase.";
-            }
-
+    
+            Posting posting = index.get(word).pList;
             while (posting != null) {
-                //System.out.println("\t" + sources.get(num));
-                SourceRecord docInfo = sources.get(posting.docId);
-                if (docInfo != null) { // Check if docInfo exists
-                    result += "\t" + posting.docId + " - " + docInfo.title + " - " + docInfo.length + "\n";
-                } else {
-                    result += "\t" + posting.docId + " - [Document Info Not Found] \n"; // Handle missing doc info
-                }
+                docIdSet.add(posting.docId);
                 posting = posting.next;
             }
-            return result.isEmpty() ? "No documents found matching the phrase." : result; // Return message if result is still empty
         }
+    
+        if (docIdSet.isEmpty()) {
+            return "No matching documents found.";
+        }
+    
+        for (int docId : docIdSet) {
+            result += "\t" + docId + " - " + sources.get(docId).title + " - " + sources.get(docId).length + "\n";
+        }
+    
+        return result;
+    }
+    
+    public String find_24_01(String phrase) { // any mumber of terms non-optimized search //// Finds documents containing all words in a phrase (basic search function)
+        String result = "";
+        String[] words = phrase.split("\\W+");
+        int len = words.length;
+
+        if (!index.containsKey(words[0].toLowerCase())) {
+            return "Term '" + words[0] + "' not found in index.";
+        }
+        Posting posting = index.get(words[0].toLowerCase()).pList;
+        int i = 1;
+        while (i < len) {
+            if (!index.containsKey(words[i].toLowerCase())) {
+                return "Term '" + words[i] + "' not found in index.";
+            }
+            posting = intersect(posting, index.get(words[i].toLowerCase()).pList);
+            i++;
+        }
+        while (posting != null) {
+            //System.out.println("\t" + sources.get(num));
+            result += "\t" + posting.docId + " - " + sources.get(posting.docId).title + " - " + sources.get(posting.docId).length + "\n";
+            posting = posting.next;
+        }
+        return result;
+    }
     
     
     //---------------------------------

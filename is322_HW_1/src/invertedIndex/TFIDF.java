@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class TFIDF {
     private List<List<String>> documents;
@@ -16,6 +19,7 @@ public class TFIDF {
     private List<Map<String, Double>> tfidfScores;
     private List<String> rawDocuments;
     private List<String> documentsNames;
+    
 
     public TFIDF() {
 
@@ -41,6 +45,7 @@ public class TFIDF {
     public List<String> loadFiles(List<String> files) throws IOException {
         this.documentsNames = new ArrayList<>();
         this.rawDocuments = new ArrayList<>();
+        
 
         for (String filePath : files) {
             File f = new File(filePath);
@@ -53,7 +58,14 @@ public class TFIDF {
                 }
                 br.close();
                 rawDocuments.add(sb.toString());
-                documentsNames.add(filePath);
+                String originPath =  "https://en.wikipedia.org/wiki/";
+                Path path = Paths.get(filePath);
+                String fileName = path.getFileName().toString();
+                
+                // remove .txt from the file name
+                
+                fileName = fileName.substring(0, fileName.length() - 4);
+                documentsNames.add(originPath+fileName);
             }
         }
         return rawDocuments;

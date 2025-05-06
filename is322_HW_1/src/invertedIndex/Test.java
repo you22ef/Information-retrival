@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
  * @author ehab
  */
 public class Test {
-
     public static void main(String args[]) throws IOException {
         Index5 index = new Index5();
         WikiCrawler crawler = new WikiCrawler();
@@ -82,8 +81,18 @@ public class Test {
             // Step 5: Print the results
             tfidf.printResults(results);
             
+            // join the tokens to form a string
+            String joinedTokens = String.join(" ", queryTokens);
+
+            System.out.print("Enter 1 for (or) 2 for (and): ");
+            Scanner scanner1 = new Scanner(System.in);
+            int choice = scanner1.nextInt();
+            if (choice == 1) {
+                System.out.println("OR search result = \n" + index.find_24_01_OR(joinedTokens));
+            } else if (choice == 2) {
+                System.out.println("AND search result = \n" + index.find_24_01(joinedTokens));
+            }
             
-            System.out.println("Phrase search result = \n" + index.find_24_01(query));
         } while (!query.isEmpty());
 
     }
